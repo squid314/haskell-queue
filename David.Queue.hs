@@ -1,5 +1,5 @@
 
-module Testing.Queue (
+module David.Queue (
     Stack(..),
     push,
     pop,
@@ -16,6 +16,10 @@ push s b = Stack b s
 
 pop :: Stack a -> Stack a
 pop (Stack a s) = s
+pop Empty = badPop
+
+badPop :: a
+badPop = errorEmptyStack
 
 peek :: Stack a -> a
 peek (Stack a s) = a
@@ -32,11 +36,11 @@ len s = sfoldLeft (\count _ -> count + 1) 0 s
 
 
 
+-- | The 'Queue' type provides a functional FIFO data structure.
+data Queue a = Queue (Stack a) (Stack a) deriving (Show, Eq)
 
---data Queue a = Queue (Stack a) (Stack a) deriving (Show, Eq)
---
---
---
+
+
 --instance Semigroup Queue a where
 --    (<>) = (++)
 --instance Monoid Queue a where
@@ -54,3 +58,17 @@ len s = sfoldLeft (\count _ -> count + 1) 0 s
 --dequeue (Queue f r) = Queue (pop f) r
 --
 --
+--
+
+
+
+-- Error code
+------ Common strings to reduce constant strings when compiled (a la GHC.List)
+errorEmptyStack :: String -> a
+errorEmptyStack fun = error (module_str ++ fun ++ ": empty stack")
+
+errorEmptyQueue :: Stirng -> a
+errorEmptyQueue fun = error (module_str ++ fun ++ ": empty queue")
+
+module_str :: String
+module_str = "David.Queue."
